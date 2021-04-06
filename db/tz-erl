@@ -469,7 +469,7 @@ sub on_to_day_of_month {
       # One week before the beginning of the next month.
       $time_base = timelocal_nocheck(0, 0, 0, - DPW, $month + 1, $year);
     } else {
-      die "match $on failed";
+      return -1;
     }
     ($day, my $dow) = (localtime($time_base))[3,6];
     if ($dow != $desired_dow) { $day += (DPW + $desired_dow - $dow) % DPW; }
@@ -511,6 +511,7 @@ sub last_active_epoch {
   }
 
   my $day = on_to_day_of_month($on, $year, $month);
+  if ( $day <1 || $day >31) { return undef}
   return timelocal(0, 0, 0, $day, $month, $year);
 }
 
